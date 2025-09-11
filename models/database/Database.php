@@ -7,17 +7,17 @@ use PDOException;
 
 abstract class Database
 {
-    public function connection(){
+    public static function connection(){
         $servername = "localhost";
         $username = "root";
-        $password = "";
+        $password = "root";
         $dbname = "media_library";
 
         try {
-            $connexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            return $connexion;
+            return $connection;
         }catch (PDOException $e){
             die("Connection failed: " . $e->getMessage());
         }
