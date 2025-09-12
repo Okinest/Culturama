@@ -1,5 +1,6 @@
 <?php
     require_once 'layout/head.php';
+    require_once 'layout/navbar.php';
 ?>
 <body>
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -15,7 +16,7 @@
                 🎬 Films
             </div>
         </a>
-        <a href="albums" class="no-underline">
+        <a href="/album/playlist" class="no-underline">
             <div class="bg-[#27ae60] text-white px-12 py-8 rounded-xl shadow-lg text-2xl transition-colors duration-200">
                 🎵 Albums
             </div>
