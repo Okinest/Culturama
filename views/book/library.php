@@ -1,5 +1,6 @@
 <?php
 require_once ('views/layout/head.php');
+require_once ('views/layout/navbar.php');
 ?>
 <div class="container mx-auto px-4">
     <h2 class="text-center text-2xl font-bold my-4">Liste des Livres (total: <?= count($books) ?>)</h2>

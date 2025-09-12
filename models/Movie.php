@@ -2,7 +2,8 @@
 
 namespace models;
 
-use models\Media;
+use models\database\Database;
+use PDOException;
 
 enum Genre {
     case Action;
@@ -14,22 +15,22 @@ enum Genre {
 }
 class Movie extends Media
 {
-    private double $duration;
+    private float $duration;
     private Genre $genre;
 
-    public function __construct(string $title, string $author, double $duration, Genre $genre, bool $isAvailable = true)
+    public function __construct(string $title, string $author, float $duration, Genre $genre,\DateTime $createdAt, \DateTime $updatedAt, bool $isAvailable = true)
     {
-        parent::__construct($title, $author, $isAvailable);
+        parent::__construct($title, $author, $updatedAt, $createdAt, $isAvailable);
         $this->duration = $duration;
         $this->genre = $genre;
     }
 
-    public function getDuration(): double
+    public function getDuration(): float
     {
         return $this->duration;
     }
 
-    public function setDuration(double $duration): void
+    public function setDuration(float $duration): void
     {
         $this->duration = $duration;
     }
@@ -42,5 +43,17 @@ class Movie extends Media
     public function setGenre(Genre $genre): void
     {
         $this->genre = $genre;
+    }
+
+    public static function getMovies(): array {
+        try {
+            $db = Database::connection();
+            $stmt = $db->prepare("SELECT * FROM movies ORDER BY created_at DESC");
+            $stmt->execute();
+
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
     }
 }
