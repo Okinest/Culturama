@@ -16,6 +16,11 @@ require_once ('views/layout/navbar.php');
                         <h4 class="text-lg font-semibold"><?= $book['title'] ?></h4>
                         <p class="text-gray-700">Auteur : <?= $book['author'] ?></p>
                         <p class="text-gray-700">Nombre de pages: <?= $book['pageNumber'] ?></p>
+                        <div class="flex items-center">
+                            <label for="isAvailable" class="text-gray-700">Disponible :</label>
+                            <input name="isAvailable" type="checkbox" value="<?= $book['isAvailable'] ?>"
+                                   class="ml-1" <?= $book['isAvailable'] ? 'checked' : '' ?> disabled>
+                        </div>
                     </div>
                 </div>
             </div>
