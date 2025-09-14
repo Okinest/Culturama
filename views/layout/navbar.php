@@ -4,14 +4,14 @@
     <a href="/" class="font-bold text-lg">
         Culturama
     </a>
-    <div>
-        <?php if (isset($_SESSION['user'])): ?>
-            <p class="text-blue-600">Bonjour, <?= $_SESSION['user'] ?></p>
-            <a href="/logout.php" title="Déconnexion">
-                <img src="/assets/logout.svg" alt="Déconnexion" class="h-6">
+    <div class="flex gap-4">
+        <?php if (isset($_SESSION['username'])): ?>
+            <p class="text-blue-600"><?= $_SESSION['username'] ?></p>
+            <a href="/user/logout" title="Déconnexion">
+                <span class="material-symbols-outlined h-6 text-red-600">logout</span>
             </a>
         <?php else: ?>
-            <a href="/user/form" class="text-blue-600 hover:underline">Connexion</a>
+            <a href="/user/login" class="text-blue-600 hover:underline">Connexion</a>
         <?php endif; ?>
     </div>
 </nav>

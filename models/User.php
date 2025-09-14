@@ -3,18 +3,21 @@
 namespace models;
 
 use models\database\Database;
+use PDO;
 
 class User
 {
     private int $id;
+    private string $username;
     private string $email;
     private string $password;
     private \DateTime $createdAt;
     private \DateTime $updatedAt;
 
-    public function __construct(int $id, string $email, string $password, \DateTime $createdAt, \DateTime $updatedAt)
+    public function __construct(int $id, string $username, string $email, string $password, \DateTime $createdAt, \DateTime $updatedAt)
     {
         $this->id = $id;
+        $this->username = $username;
         $this->email = $email;
         $this->password = $password;
         $this->createdAt = $createdAt;
@@ -29,6 +32,16 @@ class User
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
     public function getEmail(): string
@@ -71,21 +84,23 @@ class User
         $this->updatedAt = $updatedAt;
     }
 
-    public function create($email,$password): User
+    public static function create($username, $email, $password): User
     {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("INSERT INTO users (email, password, created_at, updated_at) VALUES (:email, :password, NOW(), NOW())");
+            $stmt = $db->prepare("INSERT INTO users (username, email, password, created_at, updated_at) 
+                                        VALUES (:username, :email, :password, NOW(), NOW())");
 
             $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
 
+            $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
             $stmt->bindParam(':password', $hashedPassword, \PDO::PARAM_STR);
             $stmt->execute();
 
             $user_id = $db->lastInsertId();
 
-            return new User($user_id, $email, $hashedPassword, new \DateTime(), new \DateTime());
+            return new User($user_id, $username, $email, $hashedPassword, new \DateTime(), new \DateTime());
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
         }
@@ -98,9 +113,30 @@ class User
             $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
             $stmt->execute();
-            return $stmt->fetch(\PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                return new User(
+                    $row['id'],
+                    $row['username'],
+                    $row['email'],
+                    $row['password'],
+                    new \DateTime($row['created_at']),
+                    new \DateTime($row['updated_at'])
+                );
+            }
+            return null;
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
         }
+    }
+
+    public static function isPasswordStrong(string $password): bool
+    {
+        return strlen($password) >= 8 &&
+               preg_match('/[A-Z]/', $password) &&
+               preg_match('/[a-z]/', $password) &&
+               preg_match('/\d/', $password) &&
+               preg_match('/[\W_]/', $password);
     }
 }
