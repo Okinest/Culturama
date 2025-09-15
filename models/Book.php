@@ -28,7 +28,10 @@ class Book extends Media
     public static function getBooks() {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare('SELECT * FROM books ORDER BY created_at DESC');
+            $stmt = $db->prepare("SELECT books.*, files.path AS image
+                                        FROM books
+                                        LEFT JOIN files ON books.file_id = files.id
+                                        ORDER BY books.created_at ASC");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

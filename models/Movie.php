@@ -48,7 +48,10 @@ class Movie extends Media
     public static function getMovies(): array {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT * FROM movies ORDER BY created_at DESC");
+            $stmt = $db->prepare("SELECT movies.*, files.path AS image
+                                        FROM movies
+                                        LEFT JOIN files ON movies.file_id = files.id
+                                        ORDER BY movies.created_at DESC");
             $stmt->execute();
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);

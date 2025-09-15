@@ -19,7 +19,7 @@ require_once ('views/layout/navbar.php');
             <div class="w-full md:w-1/3 p-2">
                 <div class="bg-white rounded shadow">
                     <div class="flex flex-col items-center p-6">
-                        <span class="material-icons text-5xl mb-2">menu_movie</span>
+                        <img src="/<?= htmlspecialchars($movie['image']) ?>" alt="<?= $movie['title'] ?>" class="w-32 h-40 object-cover rounded mb-2">
                         <h4 class="text-lg font-semibold"><?= $movie['title'] ?></h4>
                         <p class="text-gray-700">Réalisateur : <?= $movie['director'] ?></p>
                         <p class="text-gray-700">
@@ -33,8 +33,8 @@ require_once ('views/layout/navbar.php');
                         <p class="text-gray-700">Genre : <?= $movie['genre'] ?></p>
                         <div class="flex items-center">
                             <label for="isAvailable" class="text-gray-700">Disponible :</label>
-                            <input name="isAvailable" type="checkbox" value="<?= $movie['isAvailable'] ?>"
-                                   class="ml-1" <?= $movie['isAvailable'] ? 'checked' : '' ?> disabled>
+                            <input type="checkbox" name="isAvailable" class="ml-1" disabled
+                                   value="<?= $movie['isAvailable'] ?>" <?= $movie['isAvailable'] ? 'checked' : '' ?>>
                         </div>
                     </div>
                 </div>

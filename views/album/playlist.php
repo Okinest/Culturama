@@ -12,7 +12,7 @@ require_once ('views/layout/navbar.php');
             <div class="w-full md:w-1/3 p-2">
                 <div class="bg-white rounded shadow">
                     <div class="flex flex-col items-center p-6">
-                        <span class="material-icons text-5xl mb-2">menu_album</span>
+                        <img src="/<?= htmlspecialchars($album['image']) ?>" alt="<?= $album['title'] ?>" class="w-32 h-32 object-cover rounded mb-2">
                         <h4 class="text-lg font-semibold"><?= $album['title'] ?></h4>
                         <p class="text-gray-700">Auteur : <?= $album['author'] ?></p>
                         <p class="text-gray-700">Nombre de chansons : <?= $album['trackNumber'] ?></p>

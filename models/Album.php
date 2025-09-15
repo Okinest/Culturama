@@ -49,7 +49,10 @@ class Album extends Media
     {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT * FROM `albums` ORDER BY `title` ASC");
+            $stmt = $db->prepare("SELECT albums.*, files.path AS image
+                                        FROM albums
+                                        LEFT JOIN files ON albums.file_id = files.id
+                                        ORDER BY albums.title ASC");
             $stmt->execute();
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
