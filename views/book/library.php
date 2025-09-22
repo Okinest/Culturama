@@ -5,7 +5,7 @@ require_once ('views/layout/head.php');
 require_once ('views/layout/navbar.php');
 
 ?>
-<div class="container mx-auto px-4">
+<div class="mx-auto px-4">
     <h2 class="text-center text-2xl font-bold my-4">Liste des Livres (total: <?= count($books) ?>)</h2>
     <div class="flex flex-wrap mt-8">
         <?php foreach ($books as $book):?>
@@ -21,9 +21,21 @@ require_once ('views/layout/navbar.php');
                             <input name="isAvailable" type="checkbox" value="<?= $book['isAvailable'] ?>"
                                    class="ml-1" <?= $book['isAvailable'] ? 'checked' : '' ?> disabled>
                         </div>
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <div class="mt-2">
+                                <a href="/book/show/<?= $book['id'] ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Voir plus</a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+        <div class="w-full md:w-1/3 p-2 flex items-center justify-center">
+            <div class="bg-blue-500 rounded shadow p-6 cursor-pointer">
+                <a href="/book/add" class="flex items-center">
+                    <i class="fa-solid fa-plus text-white"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

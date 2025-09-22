@@ -3,6 +3,9 @@ $pageTitle = "Login";
 
 require_once ('views/layout/head.php');
 ?>
+<a href="/home/index" class="absolute left-4 top-4 z-10 p-4 text-blue-600">
+    <i class="fa-solid fa-arrow-left"></i>
+</a>
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg">
         <div class="px-6 py-4 border-b">

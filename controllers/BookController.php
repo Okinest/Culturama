@@ -4,20 +4,69 @@ function library(): void {
     $books = Book::getBooks();
     require_once ('views/book/library.php');
 }
+function show($id){
+    $book = Book::getBookById($id);
+    if (!$book) {
+        header('Location: /book/library');
+        exit;
+    }
+    require_once('views/book/show.php');
+}
 function add(){
-    if (isset($_POST['bookTitle'], $_POST['bookAuthor'], $_POST['bookPageNumber'], $_POST['isAvailable'])){
+    if (isset($_POST['bookTitle'], $_POST['bookAuthor'], $_POST['bookPageNumber'])) {
         $title = $_POST['bookTitle'];
         $author = $_POST['bookAuthor'];
         $pageNumber = $_POST['bookPageNumber'];
         $isAvailable = isset($_POST['isAvailable']);
 
         if (!empty($title) && !empty($author) && !empty($pageNumber)){
-            $book = new Book($title, $author, $pageNumber, new \DateTime(), new \DateTime(), $isAvailable);
-            $book->add($title, $author, $pageNumber, $isAvailable);
-            $message = "Book added successfully !";
+            try {
+                Book::add($title, $author, $pageNumber, $isAvailable);
+                $success = "Book added successfully !";
+            } catch (Exception $e) {
+                $message = "Error: " . $e->getMessage();
+            }
         } else {
             $message = "Please fill in all fields.";
         }
-        header('Location:/book/index');
     }
+    require_once ('views/book/form.php');
+}
+
+function edit($id){
+    $book = Book::getBookById($id);
+    if (!$book) {
+        header('Location: /book/library');
+        exit;
+    }
+    if (isset($_POST['bookTitle'], $_POST['bookAuthor'], $_POST['bookPageNumber'])) {
+        $title = $_POST['bookTitle'];
+        $author = $_POST['bookAuthor'];
+        $pageNumber = $_POST['bookPageNumber'];
+        $isAvailable = isset($_POST['isAvailable']);
+
+        if (!empty($title) && !empty($author) && !empty($pageNumber)){
+            try {
+                Book::update($id, $title, $author, $pageNumber, $isAvailable);
+                $success = "Book updated successfully !";
+                header('Location: /book/show/' . $id);
+                exit;
+            } catch (Exception $e) {
+                $message = "Error: " . $e->getMessage();
+            }
+        } else {
+            $message = "Please fill in all fields.";
+        }
+    }
+    require_once ('views/book/edit.php');
+}
+function delete($id): void {
+    try {
+        Book::delete($id);
+    } catch (Exception $e) {
+        die("Error: " . $e->getMessage());
+    }
+
+    $books = Book::getBooks();
+    require_once ('views/book/library.php');
 }

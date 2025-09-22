@@ -5,7 +5,7 @@ require_once ('views/layout/head.php');
 ?>
 <div class="min-h-screen bg-gray-100">
     <a href="/user/login" class="p-4 text-blue-600 flex items-center">
-        <span class="material-symbols-outlined">arrow_back</span>
+        <i class="fa-solid fa-arrow-left"></i>
     </a>
     <div class="flex items-center justify-center">
         <div class="w-full max-w-md bg-white rounded-lg shadow-lg">

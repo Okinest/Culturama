@@ -22,6 +22,9 @@ require_once ('views/layout/navbar.php');
                             <input name="isAvailable" type="checkbox" value="<?= $album['isAvailable'] ?>"
                                    class="ml-1" <?= $album['isAvailable'] ? 'checked' : '' ?> disabled>
                         </div>
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <a href="">Voir plus</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

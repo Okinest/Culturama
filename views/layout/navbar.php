@@ -8,7 +8,7 @@
         <?php if (isset($_SESSION['username'])): ?>
             <p class="text-blue-600"><?= $_SESSION['username'] ?></p>
             <a href="/user/logout" title="Déconnexion">
-                <span class="material-symbols-outlined h-6 text-red-600">logout</span>
+                <i class="fa-solid fa-arrow-right-from-bracket h-6 text-red-600"></i>
             </a>
         <?php else: ?>
             <a href="/user/login" class="text-blue-600 hover:underline">Connexion</a>
