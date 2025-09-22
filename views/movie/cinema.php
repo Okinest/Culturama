@@ -36,9 +36,21 @@ require_once ('views/layout/navbar.php');
                             <input type="checkbox" name="isAvailable" class="ml-1" disabled
                                    value="<?= $movie['isAvailable'] ?>" <?= $movie['isAvailable'] ? 'checked' : '' ?>>
                         </div>
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <div class="mt-2">
+                                <a href="/movie/show/<?= $movie['id'] ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Voir plus</a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+        <div class="w-full md:w-1/3 p-2 flex items-center justify-center">
+            <div class="bg-blue-500 rounded shadow p-6 cursor-pointer">
+                <a href="/movie/add" class="flex items-center">
+                    <i class="fa-solid fa-plus text-white"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

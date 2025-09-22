@@ -1,5 +1,7 @@
 <?php
+require_once __DIR__ . "/../models/Movie.php";
 use models\Movie;
+use models\Genre;
 
 function cinema(): void {
     $movies = Movie::getMovies();
@@ -17,4 +19,72 @@ function search(): void {
         header('Location: /movie/cinema');
         exit();
     }
+}
+function show($id){
+    $movie = Movie::getMovieById($id);
+    if (!$movie) {
+        header('Location: /movie/library');
+        exit;
+    }
+    require_once('views/movie/show.php');
+}
+function add(){
+    if (isset($_POST['movieTitle'], $_POST['movieDirector'], $_POST['movieDuration'])) {
+        $title = $_POST['movieTitle'];
+        $director = $_POST['movieDirector'];
+        $duration = $_POST['movieDuration'];
+        $genre = Genre::from($_POST['movieGenre']);
+        $isAvailable = isset($_POST['isAvailable']);
+
+        if (!empty($title) && !empty($director) && !empty($duration)) {
+            try {
+                Movie::add($title, $director, $duration, $genre, $isAvailable);
+                $success = "Movie added successfully !";
+            } catch (Exception $e) {
+                $message = "Error: " . $e->getMessage();
+            }
+        } else {
+            $message = "Please fill in all fields.";
+        }
+    }
+    require_once ('views/movie/form.php');
+}
+
+function edit($id){
+    $movie = Movie::getMovieById($id);
+    if (!$movie) {
+        header('Location: /movie/cinema.php');
+        exit;
+    }
+    if (isset($_POST['movieTitle'], $_POST['movieDirector'], $_POST['movieDuration'], $_POST['movieGenre'])) {
+        $title = $_POST['movieTitle'];
+        $director = $_POST['movieDirector'];
+        $duration = $_POST['movieDuration'];
+        $genre = Genre::from($_POST['movieGenre']);
+        $isAvailable = isset($_POST['isAvailable']);
+
+        if (!empty($title) && !empty($director) && !empty($duration) && !empty($genre)){
+            try {
+                Movie::update($id, $title, $director, $duration, $genre, $isAvailable);
+                $success = "Movie updated successfully !";
+                header('Location: /movie/show/' . $id);
+                exit;
+            } catch (Exception $e) {
+                $message = "Error: " . $e->getMessage();
+            }
+        } else {
+            $message = "Please fill in all fields.";
+        }
+    }
+    require_once ('views/movie/edit.php');
+}
+function delete($id): void {
+    try {
+        Movie::delete($id);
+    } catch (Exception $e) {
+        die("Error: " . $e->getMessage());
+    }
+
+    $movies = Movie::getMovies();
+    require_once ('views/movie/cinema.php');
 }

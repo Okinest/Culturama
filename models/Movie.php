@@ -3,6 +3,7 @@
 namespace models;
 
 use models\database\Database;
+use PDO;
 use PDOException;
 
 enum Genre {
@@ -12,6 +13,15 @@ enum Genre {
     case Horror;
     case SciFi;
     case Documentary;
+
+    public static function from(string $name): self {
+        foreach (self::cases() as $case) {
+            if ($case->name === $name) {
+                return $case;
+            }
+        }
+        throw new \ValueError("Invalid genre: $name");
+    }
 }
 class Movie extends Media
 {
@@ -59,6 +69,21 @@ class Movie extends Media
             die("Error: " . $e->getMessage());
         }
     }
+    public static function getMovieById(int $id) {
+        try {
+            $db = Database::connection();
+            $stmt = $db->prepare("SELECT movies.*, files.path AS image
+                                        FROM movies
+                                        LEFT JOIN files ON movies.file_id = files.id
+                                        WHERE movies.id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $movie = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $movie;
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
     public static function searchMovies(string $searchTerm): array {
         try {
             $allMovies = self::getMovies();
@@ -84,6 +109,55 @@ class Movie extends Media
 
             }
             return $filtered;
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+    public static function add($title, $director, $duration, $genre, $isAvailable, $fileId = null): void
+    {
+        $db = Database::connection();
+        $stmt = $db->prepare('INSERT INTO movies (title, director, duration, genre, isAvailable, created_at, updated_at, file_id) 
+                                    VALUES (:title, :director, :duration, :genre,:isAvailable, NOW(), NOW(), :fileId)');
+        $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
+        $stmt->bindParam(':director', $director,\PDO::PARAM_STR);
+        $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
+        $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
+        $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
+        if ($fileId !== null) {
+            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        } else {
+            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+        }
+
+        $stmt->execute();
+    }
+    public static function update($id, $title, $director, $duration, $genre, $isAvailable, $fileId = null): void
+    {
+        $db = Database::connection();
+        $stmt = $db->prepare('UPDATE movies 
+                                    SET title = :title, director = :director, duration = :duration, genre = :genre, isAvailable = :isAvailable, updated_at = NOW(), file_id = :fileId
+                                    WHERE id = :id');
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
+        $stmt->bindParam(':director', $director,\PDO::PARAM_STR);
+        $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
+        $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
+        $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
+        if ($fileId !== null) {
+            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        } else {
+            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+        }
+
+        $stmt->execute();
+    }
+    public static function delete($id): void
+    {
+        $db = Database::connection();
+        try {
+            $stmt = $db->prepare('DELETE FROM movies WHERE id = :id');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->execute();
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
