@@ -131,8 +131,9 @@ class User
         }
     }
 
-    public static function isPasswordStrong(string $password): bool
+    public static function isPasswordStrong(string $username, string $password): bool
     {
-        return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password);
+        $regex = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+        return preg_match($regex, $password) && stripos($password, $username) === false;
     }
 }

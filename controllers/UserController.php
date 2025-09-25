@@ -9,12 +9,12 @@ function register()
         $password = $_POST['password'];
 
         $existingUser = User::getByEmail($email);
-        $isValid = User::isPasswordStrong($password);
+        $isValid = User::isPasswordStrong($username, $password);
 
         if ($existingUser) {
             $mailTaken = "L'adresse e-mail existe déjà.";
         } elseif(!$isValid) {
-            $weakPassword = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.";
+            $weakPassword = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre, et ne doit pas contenir le nom d'utilisateur.";
         }else {
             $user = User::create($username, $email, $password);
             if ($user) {
