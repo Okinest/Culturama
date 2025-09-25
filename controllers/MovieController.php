@@ -110,3 +110,16 @@ function delete($id): void {
     $movies = Movie::getMovies();
     require_once ('views/movie/cinema.php');
 }
+function loan_return($id) {
+    $album = Movie::getMovieById($id);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'loan' && $album['isAvailable']) {
+            Movie::update($id, $album['title'], $album['director'], $album['duration'], $album['genre'], false, $album['file_path']);
+        } elseif ($_POST['action'] === 'return' && !$album['isAvailable']) {
+            Movie::update($id, $album['title'], $album['director'], $album['duration'], $album['genre'], true, $album['file_path']);
+        }
+    }
+    header('Location: /album/show/' . $id);
+    exit;
+}

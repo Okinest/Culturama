@@ -42,7 +42,6 @@ function add() {
     }
     require_once('views/album/form.php');
 }
-
 function edit($id) {
     $album = Album::getAlbumById($id);
     if (!$album) {
@@ -81,7 +80,6 @@ function edit($id) {
     }
     require_once('views/album/edit.php');
 }
-
 function delete(int $id): void {
     try {
         Album::delete($id);
@@ -91,3 +89,17 @@ function delete(int $id): void {
     $albums = Album::getAlbums();
     require_once('views/album/playlist.php');
 }
+function loan_return($id) {
+    $album = Album::getAlbumById($id);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'loan' && $album['isAvailable']) {
+            Album::update($id, $album['title'], $album['author'], $album['trackNumber'], $album['editor'], false, $album['file_path']);
+        } elseif ($_POST['action'] === 'return' && !$album['isAvailable']) {
+            Album::update($id, $album['title'], $album['author'], $album['trackNumber'], $album['editor'], true, $album['file_path']);
+        }
+    }
+    header('Location: /album/show/' . $id);
+    exit;
+}
+

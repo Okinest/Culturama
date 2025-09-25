@@ -11,9 +11,9 @@ class Album extends Media
     private int $trackNumber;
     private string $editor;
     private array $songs = [];
-    public function __construct(string $title, string $author, int $trackNumber, string $editor, bool $isAvailable = true)
+    public function __construct(int $id, string $title, string $author, int $trackNumber, string $editor, \DateTime $createdAt, \DateTime $updatedAt,string $filePath, bool $isAvailable = true)
     {
-        parent::__construct($title, $author, $isAvailable);
+        parent::__construct($id, $title, $author, $createdAt, $updatedAt, $filePath, $isAvailable);
         $this->trackNumber = $trackNumber;
         $this->editor = $editor;
     }
@@ -68,6 +68,7 @@ class Album extends Media
             $stmt->execute();
             $album = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $album;
+
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
         }

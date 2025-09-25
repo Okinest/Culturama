@@ -9,9 +9,9 @@ use PDOException;
 class Book extends Media
 {
     private int $pageNumber;
-    public function __construct(string $title, string $author, int $pageNumber, \DateTime $createdAt, \DateTime $updatedAt, bool $isAvailable = true)
+    public function __construct(int $id, string $title, string $author, int $pageNumber, \DateTime $createdAt, \DateTime $updatedAt, string $filePath,bool $isAvailable = true)
     {
-        parent::__construct($title, $author, $createdAt, $updatedAt, $isAvailable);
+        parent::__construct($id, $title, $author, $createdAt, $updatedAt, $filePath, $isAvailable);
         $this->pageNumber = $pageNumber;
     }
 

@@ -20,6 +20,15 @@ require_once('views/layout/navbar.php');
         <p class="mb-1"><strong>Genre :</strong> <?= htmlspecialchars($movie['genre']) ?></p>
         <p class="mb-4"><strong>Disponible :</strong> <?= $movie['isAvailable'] ? 'Oui' : 'Non' ?></p>
         <div class="flex gap-4 mt-4">
+            <?php if (isset($_SESSION['username'])): ?>
+                <form method="post" action="/movie/loan_return/<?= $movie['id']  ?>">
+                    <?php if ($movie['isAvailable']): ?>
+                        <button type="submit" name="action" value="loan" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Emprunter</button>
+                    <?php else: ?>
+                        <button type="submit" name="action" value="return" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Rendre</button>
+                    <?php endif; ?>
+                </form>
+            <?php endif; ?>
             <a href="/movie/edit/<?= $movie['id'] ?>" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Modifier</a>
             <a href="/movie/delete/<?= $movie['id'] ?>" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"">Supprimer</a>
         </div>

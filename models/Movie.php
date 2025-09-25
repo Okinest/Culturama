@@ -28,9 +28,9 @@ class Movie extends Media
     private float $duration;
     private Genre $genre;
 
-    public function __construct(string $title, string $author, float $duration, Genre $genre,\DateTime $createdAt, \DateTime $updatedAt, bool $isAvailable = true)
+    public function __construct(int $id, string $title, string $author, float $duration, Genre $genre,\DateTime $createdAt, \DateTime $updatedAt, string $filePath, bool $isAvailable = true)
     {
-        parent::__construct($title, $author, $updatedAt, $createdAt, $isAvailable);
+        parent::__construct($id, $title, $author, $updatedAt, $createdAt, $filePath, $isAvailable);
         $this->duration = $duration;
         $this->genre = $genre;
     }

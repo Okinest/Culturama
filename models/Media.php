@@ -4,21 +4,32 @@ namespace models;
 
 abstract class Media
 {
+    private int $id;
     private string $title;
     private string $author;
     private bool $isAvailable;
     private \DateTime $createdAt;
     private \DateTime $updatedAt;
+    private string $filePath;
 
-    public function __construct(string $title, string $author, \DateTime $createdAt, \DateTime $updatedAt, bool $isAvailable = true)
+    public function __construct(int $id, string $title, string $author, \DateTime $createdAt, \DateTime $updatedAt, string $filePath,bool $isAvailable = true)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->author = $author;
         $this->isAvailable = $isAvailable;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->filePath = $filePath;
     }
-
+    public function getId(): int
+    {
+        return $this->id;
+    }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
     public function getTitle(): string
     {
         return $this->title;
@@ -68,6 +79,14 @@ abstract class Media
     public function return(): void
     {
         $this->isAvailable = true;
+    }
+    public function getFilePath(): string
+    {
+        return $this->filePath;
+    }
+    public function setFilePath(string $filePath): void
+    {
+        $this->filePath = $filePath;
     }
 
 }

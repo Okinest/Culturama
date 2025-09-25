@@ -92,3 +92,16 @@ function delete($id): void {
     $books = Book::getBooks();
     require_once ('views/book/library.php');
 }
+function loan_return($id) {
+    $album = Book::getBookById($id);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'loan' && $album['isAvailable']) {
+            Book::update($id, $album['title'], $album['author'], $album['pageNumber'],false, $album['file_path']);
+        } elseif ($_POST['action'] === 'return' && !$album['isAvailable']) {
+            Book::update($id, $album['title'], $album['author'], $album['pageNumber'],true, $album['file_path']);
+        }
+    }
+    header('Location: /album/show/' . $id);
+    exit;
+}
