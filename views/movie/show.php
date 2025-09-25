@@ -9,7 +9,14 @@ require_once('views/layout/navbar.php');
         <img src="/<?= htmlspecialchars($movie['image']) ?>" alt="<?= $movie['title'] ?>" class="w-40 h-56 object-cover rounded mb-4">
         <h2 class="text-2xl font-bold mb-2"><?= htmlspecialchars($movie['title']) ?></h2>
         <p class="mb-1"><strong>Auteur :</strong> <?= htmlspecialchars($movie['director']) ?></p>
-        <p class="mb-1"><strong>Durée :</strong> <?= $movie['duration'] ?></p>
+        <p class="mb-1">
+            <strong>Durée :</strong>
+            <?php
+            $heures = intdiv($movie['duration'], 60);
+            $restant = $movie['duration'] % 60;
+            echo "{$heures}h" . ($restant ? "{$restant}" : "");
+            ?>
+        </p>
         <p class="mb-1"><strong>Genre :</strong> <?= htmlspecialchars($movie['genre']) ?></p>
         <p class="mb-4"><strong>Disponible :</strong> <?= $movie['isAvailable'] ? 'Oui' : 'Non' ?></p>
         <div class="flex gap-4 mt-4">

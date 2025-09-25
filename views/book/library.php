@@ -30,12 +30,14 @@ require_once ('views/layout/navbar.php');
                 </div>
             </div>
         <?php endforeach; ?>
-        <div class="w-full md:w-1/3 p-2 flex items-center justify-center">
-            <div class="bg-blue-500 rounded shadow p-6 cursor-pointer">
-                <a href="/book/add" class="flex items-center">
-                    <i class="fa-solid fa-plus text-white"></i>
-                </a>
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="w-full md:w-1/3 p-2 flex items-center justify-center">
+                <div class="bg-blue-500 rounded shadow p-6 cursor-pointer">
+                    <a href="/book/add" class="flex items-center">
+                        <i class="fa-solid fa-plus text-white"></i>
+                    </a>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>

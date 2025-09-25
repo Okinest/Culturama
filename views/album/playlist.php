@@ -23,11 +23,20 @@ require_once ('views/layout/navbar.php');
                                    class="ml-1" <?= $album['isAvailable'] ? 'checked' : '' ?> disabled>
                         </div>
                         <?php if (isset($_SESSION['username'])): ?>
-                            <a href="">Voir plus</a>
+                            <a href="/album/show/<?= $album['id'] ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded mt-2">Voir plus</a>
                         <?php endif; ?>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="w-full md:w-1/3 p-2 flex items-center justify-center">
+                <div class="bg-blue-500 rounded shadow p-6 cursor-pointer">
+                    <a href="/album/add" class="flex items-center">
+                        <i class="fa-solid fa-plus text-white"></i>
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
