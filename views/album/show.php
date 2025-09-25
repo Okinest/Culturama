@@ -6,7 +6,7 @@ require_once('views/layout/navbar.php');
 <div class="max-w-xl mx-auto mt-10 bg-white p-8 rounded shadow">
     <a href="/album/playlist" class="text-blue-600 mb-4 inline-block"><i class="fa-solid fa-arrow-left"></i> </a>
     <div class="flex flex-col items-center">
-        <img src="/<?= htmlspecialchars($album['image']) ?>" alt="<?= $album['title'] ?>" class="w-40 h-40 object-cover rounded mb-4">
+        <img src="/<?= htmlspecialchars($album['file_path'] ?? '') ?>" alt="<?= $album['title'] ?>" class="w-40 h-40 object-cover rounded mb-4">
         <h2 class="text-2xl font-bold mb-2"><?= htmlspecialchars($album['title']) ?></h2>
         <p class="mb-1"><strong>Auteur :</strong> <?= htmlspecialchars($album['author']) ?></p>
         <p class="mb-1"><strong>Éditeur :</strong> <?= htmlspecialchars($album['editor']) ?></p>

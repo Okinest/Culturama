@@ -11,6 +11,10 @@ require_once ('views/layout/navbar.php');
     <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Modifier un livre</h1>
     <form method="post" action="/book/edit/<?= $book['id']?>" enctype="multipart/form-data" class="space-y-4">
         <div>
+            <label for="bookImage" class="block text-gray-700 font-medium mb-1">Image du livre :</label>
+            <input type="file" id="bookImage" name="bookImage" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded">
+        </div>
+        <div>
             <label for="bookTitle" class="block text-gray-700 font-medium mb-1">Titre:</label>
             <input type="text" id="bookTitle" name="bookTitle" required class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                    value="<?= $book['title']?? ""?>">

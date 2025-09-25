@@ -51,10 +51,7 @@ class Album extends Media
     {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT albums.*, files.path AS image
-                                        FROM albums
-                                        LEFT JOIN files ON albums.file_id = files.id
-                                        ORDER BY albums.created_at DESC");
+            $stmt = $db->prepare("SELECT * FROM albums ORDER BY created_at DESC");
             $stmt->execute();
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -66,10 +63,7 @@ class Album extends Media
     public static function getAlbumById(int $id) {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT albums.*, files.path AS image 
-                                        FROM albums 
-                                        LEFT JOIN files ON albums.file_id = files.id 
-                                        WHERE albums.id = :id");
+            $stmt = $db->prepare("SELECT * FROM albums WHERE id = :id");
             $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
             $stmt->execute();
             $album = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -91,29 +85,29 @@ class Album extends Media
         }
     }
 
-    public static function add($title, $author, $trackNumber, $editor, $isAvailable, $fileId = null): void
+    public static function add($title, $author, $trackNumber, $editor, $isAvailable, $filePath = null): void
     {
         $db = Database::connection();
-        $stmt = $db->prepare('INSERT INTO albums (title, author, trackNumber, editor, isAvailable, created_at, updated_at, file_id) 
-                                VALUES (:title, :author, :trackNumber, :editor, :isAvailable, NOW(), NOW(), :fileId)');
+        $stmt = $db->prepare('INSERT INTO albums (title, author, trackNumber, editor, isAvailable, created_at, updated_at, file_path) 
+                                VALUES (:title, :author, :trackNumber, :editor, :isAvailable, NOW(), NOW(), :filePath)');
         $stmt->bindParam(':title', $title, \PDO::PARAM_STR);
         $stmt->bindParam(':author', $author, \PDO::PARAM_STR);
         $stmt->bindParam(':trackNumber', $trackNumber, \PDO::PARAM_INT);
         $stmt->bindParam(':editor', $editor, \PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable, \PDO::PARAM_BOOL);
-        if ($fileId !== null) {
-            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        if ($filePath !== null) {
+            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
         }
         $stmt->execute();
     }
 
-    public static function update($id, $title, $author, $trackNumber, $editor, $isAvailable, $fileId = null): void
+    public static function update($id, $title, $author, $trackNumber, $editor, $isAvailable, $filePath = null): void
     {
         $db = Database::connection();
         $stmt = $db->prepare('UPDATE albums 
-                                SET title = :title, author = :author, trackNumber = :trackNumber, editor = :editor, isAvailable = :isAvailable, updated_at = NOW(), file_id = :fileId
+                                SET title = :title, author = :author, trackNumber = :trackNumber, editor = :editor, isAvailable = :isAvailable, updated_at = NOW(), file_path = :filePath
                                 WHERE id = :id');
         $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->bindParam(':title', $title, \PDO::PARAM_STR);
@@ -121,10 +115,10 @@ class Album extends Media
         $stmt->bindParam(':trackNumber', $trackNumber, \PDO::PARAM_INT);
         $stmt->bindParam(':editor', $editor, \PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable, \PDO::PARAM_BOOL);
-        if ($fileId !== null) {
-            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        if ($filePath !== null) {
+            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
         }
         $stmt->execute();
     }
@@ -133,6 +127,15 @@ class Album extends Media
     {
         $db = Database::connection();
         try {
+            $stmt = $db->prepare('SELECT file_path FROM albums WHERE id = :id');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $album = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($album && !empty($album['file_path']) && file_exists($album['file_path'])) {
+                unlink($album['file_path']);
+            }
+
             $stmt = $db->prepare('DELETE FROM albums WHERE id = :id');
             $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
             $stmt->execute();

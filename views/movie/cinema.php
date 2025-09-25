@@ -19,7 +19,7 @@ require_once ('views/layout/navbar.php');
             <div class="w-full md:w-1/3 p-2">
                 <div class="bg-white rounded shadow">
                     <div class="flex flex-col items-center p-6">
-                        <img src="/<?= htmlspecialchars($movie['image']) ?>" alt="<?= $movie['title'] ?>" class="w-32 h-40 object-cover rounded mb-2">
+                        <img src="/<?= htmlspecialchars($movie['file_path']) ?>" alt="<?= $movie['title'] ?>" class="w-32 h-40 object-cover rounded mb-2">
                         <h4 class="text-lg font-semibold"><?= $movie['title'] ?></h4>
                         <p class="text-gray-700">Réalisateur : <?= $movie['director'] ?></p>
                         <p class="text-gray-700">

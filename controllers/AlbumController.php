@@ -17,11 +17,21 @@ function add() {
         $trackNumber = $_POST['albumTrackNumber'];
         $editor = $_POST['albumEditor'];
         $isAvailable = isset($_POST['isAvailable']);
-        $fileId = null;
+        $filePath = null;
+
+        if (isset($_FILES['albumImage']) && $_FILES['albumImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/albums/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['albumImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['albumImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
 
         if (!empty($title) && !empty($author) && !empty($trackNumber) && !empty($editor)) {
             try {
-                Album::add($title, $author, $trackNumber, $editor, $isAvailable, $fileId);
+                Album::add($title, $author, $trackNumber, $editor, $isAvailable, $filePath);
                 $success = "Album ajouté avec succès !";
             } catch (Exception $e) {
                 $message = "Erreur : " . $e->getMessage();
@@ -45,11 +55,20 @@ function edit($id) {
         $trackNumber = $_POST['albumTrackNumber'];
         $editor = $_POST['albumEditor'];
         $isAvailable = isset($_POST['isAvailable']);
-        $fileId = null;
+        $filePath = null;
 
+        if (isset($_FILES['albumImage']) && $_FILES['albumImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/albums/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['albumImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['albumImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
         if (!empty($title) && !empty($author) && !empty($trackNumber) && !empty($editor)) {
             try {
-                Album::update($id, $title, $author, $trackNumber, $editor, $isAvailable, $fileId);
+                Album::update($id, $title, $author, $trackNumber, $editor, $isAvailable, $filePath);
                 $success = "Album modifié avec succès !";
                 header('Location: /album/show/' . $id);
                 exit;

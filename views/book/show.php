@@ -6,7 +6,7 @@ require_once('views/layout/navbar.php');
 <div class="max-w-xl mx-auto mt-10 bg-white p-8 rounded shadow">
     <a href="/book/library" class="text-blue-600 mb-4 inline-block"><i class="fa-solid fa-arrow-left"></i> </a>
     <div class="flex flex-col items-center">
-        <img src="/<?= htmlspecialchars($book['image']) ?>" alt="<?= $book['title'] ?>" class="w-40 h-56 object-cover rounded mb-4">
+        <img src="/<?= htmlspecialchars($book['file_path']) ?>" alt="<?= $book['title'] ?>" class="w-40 h-56 object-cover rounded mb-4">
         <h2 class="text-2xl font-bold mb-2"><?= htmlspecialchars($book['title']) ?></h2>
         <p class="mb-1"><strong>Auteur :</strong> <?= htmlspecialchars($book['author']) ?></p>
         <p class="mb-1"><strong>Pages :</strong> <?= $book['pageNumber'] ?></p>

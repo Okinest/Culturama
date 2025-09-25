@@ -58,10 +58,7 @@ class Movie extends Media
     public static function getMovies(): array {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT movies.*, files.path AS image
-                                        FROM movies
-                                        LEFT JOIN files ON movies.file_id = files.id
-                                        ORDER BY movies.created_at DESC");
+            $stmt = $db->prepare("SELECT * FROM movies ORDER BY created_at DESC");
             $stmt->execute();
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -72,10 +69,7 @@ class Movie extends Media
     public static function getMovieById(int $id) {
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT movies.*, files.path AS image
-                                        FROM movies
-                                        LEFT JOIN files ON movies.file_id = files.id
-                                        WHERE movies.id = :id");
+            $stmt = $db->prepare("SELECT * FROM movies WHERE id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $movie = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -113,29 +107,29 @@ class Movie extends Media
             die("Error: " . $e->getMessage());
         }
     }
-    public static function add($title, $director, $duration, $genre, $isAvailable, $fileId = null): void
+    public static function add($title, $director, $duration, $genre, $isAvailable, $filePath = null): void
     {
         $db = Database::connection();
-        $stmt = $db->prepare('INSERT INTO movies (title, director, duration, genre, isAvailable, created_at, updated_at, file_id) 
-                                    VALUES (:title, :director, :duration, :genre,:isAvailable, NOW(), NOW(), :fileId)');
+        $stmt = $db->prepare('INSERT INTO movies (title, director, duration, genre, isAvailable, created_at, updated_at, file_path) 
+                                    VALUES (:title, :director, :duration, :genre,:isAvailable, NOW(), NOW(), :filePath)');
         $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
         $stmt->bindParam(':director', $director,\PDO::PARAM_STR);
         $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
         $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
-        if ($fileId !== null) {
-            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        if ($filePath !== null) {
+            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
         }
 
         $stmt->execute();
     }
-    public static function update($id, $title, $director, $duration, $genre, $isAvailable, $fileId = null): void
+    public static function update($id, $title, $director, $duration, $genre, $isAvailable, $filePath = null): void
     {
         $db = Database::connection();
         $stmt = $db->prepare('UPDATE movies 
-                                    SET title = :title, director = :director, duration = :duration, genre = :genre, isAvailable = :isAvailable, updated_at = NOW(), file_id = :fileId
+                                    SET title = :title, director = :director, duration = :duration, genre = :genre, isAvailable = :isAvailable, updated_at = NOW(), file_path = :filePath
                                     WHERE id = :id');
         $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
@@ -143,10 +137,10 @@ class Movie extends Media
         $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
         $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
-        if ($fileId !== null) {
-            $stmt->bindParam(':fileId', $fileId, \PDO::PARAM_INT);
+        if ($filePath !== null) {
+            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':fileId', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
         }
 
         $stmt->execute();
@@ -155,6 +149,15 @@ class Movie extends Media
     {
         $db = Database::connection();
         try {
+            $stmt = $db->prepare('SELECT file_path FROM movies WHERE id = :id');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $movie = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($movie && !empty($movie['file_path']) && file_exists($movie['file_path'])) {
+                unlink($movie['file_path']);
+            }
+
             $stmt = $db->prepare('DELETE FROM movies WHERE id = :id');
             $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
             $stmt->execute();

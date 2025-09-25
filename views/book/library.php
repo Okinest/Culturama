@@ -12,7 +12,7 @@ require_once ('views/layout/navbar.php');
             <div class="w-full md:w-1/3 p-2">
                 <div class="bg-white rounded shadow">
                     <div class="flex flex-col items-center p-6">
-                        <img src="/<?= htmlspecialchars($book['image']) ?>" alt="<?= $book['title'] ?>" class="w-32 h-40 object-cover rounded mb-2">
+                        <img src="/<?= htmlspecialchars($book['file_path']) ?>" alt="<?= $book['title'] ?>" class="w-32 h-40 object-cover rounded mb-2">
                         <h4 class="text-lg font-semibold"><?= $book['title'] ?></h4>
                         <p class="text-gray-700">Auteur : <?= $book['author'] ?></p>
                         <p class="text-gray-700">Nombre de pages: <?= $book['pageNumber'] ?></p>

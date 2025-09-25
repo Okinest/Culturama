@@ -18,10 +18,21 @@ function add(){
         $author = $_POST['bookAuthor'];
         $pageNumber = $_POST['bookPageNumber'];
         $isAvailable = isset($_POST['isAvailable']);
+        $filePath = null;
+
+        if (isset($_FILES['bookImage']) && $_FILES['bookImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/books/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['bookImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['bookImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
 
         if (!empty($title) && !empty($author) && !empty($pageNumber)){
             try {
-                Book::add($title, $author, $pageNumber, $isAvailable);
+                Book::add($title, $author, $pageNumber, $isAvailable, $filePath);
                 $success = "Book added successfully !";
             } catch (Exception $e) {
                 $message = "Error: " . $e->getMessage();
@@ -44,10 +55,21 @@ function edit($id){
         $author = $_POST['bookAuthor'];
         $pageNumber = $_POST['bookPageNumber'];
         $isAvailable = isset($_POST['isAvailable']);
+        $filePath = null;
+
+        if (isset($_FILES['bookImage']) && $_FILES['bookImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/books/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['bookImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['bookImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
 
         if (!empty($title) && !empty($author) && !empty($pageNumber)){
             try {
-                Book::update($id, $title, $author, $pageNumber, $isAvailable);
+                Book::update($id, $title, $author, $pageNumber, $isAvailable, $filePath);
                 $success = "Book updated successfully !";
                 header('Location: /book/show/' . $id);
                 exit;

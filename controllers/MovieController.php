@@ -35,10 +35,21 @@ function add(){
         $duration = $_POST['movieDuration'];
         $genre = Genre::from($_POST['movieGenre']);
         $isAvailable = isset($_POST['isAvailable']);
+        $filePath = null;
+
+        if (isset($_FILES['movieImage']) && $_FILES['movieImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/movies/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['movieImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['movieImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
 
         if (!empty($title) && !empty($director) && !empty($duration)) {
             try {
-                Movie::add($title, $director, $duration, $genre, $isAvailable);
+                Movie::add($title, $director, $duration, $genre, $isAvailable, $filePath);
                 $success = "Movie added successfully !";
             } catch (Exception $e) {
                 $message = "Error: " . $e->getMessage();
@@ -62,10 +73,21 @@ function edit($id){
         $duration = $_POST['movieDuration'];
         $genre = Genre::from($_POST['movieGenre']);
         $isAvailable = isset($_POST['isAvailable']);
+        $filePath = null;
 
-        if (!empty($title) && !empty($director) && !empty($duration) && !empty($genre)){
+        if (isset($_FILES['movieImage']) && $_FILES['movieImage']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'assets/images/movies/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $filename = uniqid() . '_' . basename($_FILES['movieImage']['name']);
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['movieImage']['tmp_name'], $targetPath)) {
+                $filePath = $targetPath;
+            }
+        }
+
+        if (!empty($title) && !empty($director) && !empty($duration)){
             try {
-                Movie::update($id, $title, $director, $duration, $genre, $isAvailable);
+                Movie::update($id, $title, $director, $duration, $genre, $isAvailable, $filePath);
                 $success = "Movie updated successfully !";
                 header('Location: /movie/show/' . $id);
                 exit;
