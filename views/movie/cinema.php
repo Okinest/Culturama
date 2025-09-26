@@ -14,6 +14,17 @@ require_once ('views/layout/navbar.php');
             <button type="button" class="bg-gray-500 text-white p-2 rounded-r" onclick="window.location.href='/movie/cinema'">Réinitialiser</button>
         </div>
     </form>
+    <form method="get" action="/movie/cinema" class="flex items-center mb-4">
+        <label for="sort" class="mr-2">Trier par :</label>
+        <select name="sort" id="sort" class="border rounded p-1 mr-2">
+            <option value="title" <?= ($_GET['sort'] ?? '') === 'title' ? 'selected' : '' ?>>Titre</option>
+            <option value="director" <?= ($_GET['sort'] ?? '') === 'director' ? 'selected' : '' ?>>Réalisateur</option>
+            <option value="duration" <?= ($_GET['sort'] ?? '') === 'duration' ? 'selected' : '' ?>>Durée</option>
+            <option value="genre" <?= ($_GET['sort'] ?? '') === 'genre' ? 'selected' : '' ?>>Genre</option>
+            <option value="created_at" <?= ($_GET['sort'] ?? '') === 'created_at' ? 'selected' : '' ?>>Date de création</option>
+        </select>
+        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">Trier</button>
+    </form>
     <div class="flex flex-wrap mt-8">
         <?php foreach ($movies as $movie): ?>
             <div class="w-full md:w-1/3 p-2">

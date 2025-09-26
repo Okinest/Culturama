@@ -4,7 +4,8 @@ use models\Movie;
 use models\Genre;
 
 function cinema(): void {
-    $movies = Movie::getMovies();
+    $sort = $_GET['sort'] ?? 'created_at';
+    $movies = Movie::getMovies($sort);
 
     require_once ('views/movie/cinema.php');
 }

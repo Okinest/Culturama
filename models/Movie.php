@@ -64,10 +64,12 @@ class Movie extends Media
         $this->genre = $genre;
     }
 
-    public static function getMovies(): array {
+    public static function getMovies($sort = 'created_at'): array {
+        $allowedSorts = ['title', 'author', 'duration', 'genre', 'created_at'];
+        $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT * FROM movies ORDER BY created_at DESC");
+            $stmt = $db->prepare("SELECT * FROM movies ORDER BY $sort ASC");
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

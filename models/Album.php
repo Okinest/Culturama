@@ -56,11 +56,13 @@ class Album extends Media
         return $this->songs;
     }
 
-    public static function getAlbums()
+    public static function getAlbums($sort = 'created_at')
     {
+        $allowedSorts = ['title', 'author', 'editor', 'created_at'];
+        $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT * FROM albums ORDER BY created_at DESC");
+            $stmt = $db->prepare("SELECT * FROM albums ORDER BY $sort ASC");
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

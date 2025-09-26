@@ -2,7 +2,8 @@
 use models\Album;
 
 function playlist(): void {
-    $albums = Album::getAlbums();
+    $sort = $_GET['sort'] ?? 'created_at';
+    $albums = Album::getAlbums($sort);
     require_once ('views/album/playlist.php');
 }
 function show(int $id) {

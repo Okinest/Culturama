@@ -32,10 +32,12 @@ class Book extends Media
         $this->pageNumber = $pageNumber;
     }
 
-    public static function getBooks() {
+    public static function getBooks($sort = 'created_at') {
+        $allowedSorts = ['title', 'author', 'pageNumber', 'created_at'];
+        $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
         try {
             $db = Database::connection();
-            $stmt = $db->prepare("SELECT * FROM books ORDER BY created_at ASC");
+            $stmt = $db->prepare("SELECT * FROM books ORDER BY $sort ASC");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

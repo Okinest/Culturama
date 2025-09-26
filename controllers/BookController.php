@@ -1,7 +1,8 @@
 <?php
 use models\Book;
 function library(): void {
-    $books = Book::getBooks();
+    $sort = $_GET['sort'] ?? 'created_at';
+    $books = Book::getBooks($sort);
     require_once ('views/book/library.php');
 }
 function show($id){
