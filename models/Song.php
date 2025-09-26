@@ -2,6 +2,13 @@
 
 namespace models;
 
+/**
+ * Classe représentant une chanson.
+ *
+ * @property string $title Titre de la chanson
+ * @property int $duration Durée en secondes
+ * @property int $rating Note sur 5
+ */
 class Song
 {
     private string $title;

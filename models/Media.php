@@ -2,6 +2,17 @@
 
 namespace models;
 
+/**
+ * Classe abstraite représentant un média.
+ *
+ * @property int $id Identifiant unique
+ * @property string $title Titre du média
+ * @property string $author Auteur ou créateur
+ * @property bool $isAvailable Disponibilité
+ * @property \DateTime $createdAt Date de création
+ * @property \DateTime $updatedAt Date de mise à jour
+ * @property string $filePath Chemin du fichier associé
+ */
 abstract class Media
 {
     private int $id;

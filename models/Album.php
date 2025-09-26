@@ -6,6 +6,15 @@ use models\database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Classe représentant un album musical.
+ *
+ * @property int $trackNumber Nombre de pistes de l'album
+ * @property string $editor Nom de l'éditeur
+ * @property array $songs Liste des chansons de l'album
+ *
+ * Hérite de Media.
+ */
 class Album extends Media
 {
     private int $trackNumber;

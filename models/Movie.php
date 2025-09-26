@@ -23,6 +23,15 @@ enum Genre {
         throw new \ValueError("Invalid genre: $name");
     }
 }
+
+/**
+ * Classe représentant un film.
+ *
+ * @property float $duration Durée du film en minutes
+ * @property Genre $genre Genre du film
+ *
+ * Hérite de Media.
+ */
 class Movie extends Media
 {
     private float $duration;

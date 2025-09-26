@@ -6,6 +6,13 @@ use models\database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Classe représentant un livre.
+ *
+ * @property int $pageNumber Nombre de pages du livre
+ *
+ * Hérite de Media.
+ */
 class Book extends Media
 {
     private int $pageNumber;
