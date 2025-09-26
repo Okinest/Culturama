@@ -4,6 +4,7 @@ namespace models;
 
 use models\database\Database;
 use PDO;
+use PDOException;
 
 class User
 {
@@ -93,15 +94,15 @@ class User
 
             $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
 
-            $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
-            $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
-            $stmt->bindParam(':password', $hashedPassword, \PDO::PARAM_STR);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
             $stmt->execute();
 
             $user_id = $db->lastInsertId();
 
             return new User($user_id, $username, $email, $hashedPassword, new \DateTime(), new \DateTime());
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
     }
@@ -126,7 +127,7 @@ class User
                 );
             }
             return null;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
     }

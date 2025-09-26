@@ -61,7 +61,7 @@ class Movie extends Media
             $stmt = $db->prepare("SELECT * FROM movies ORDER BY created_at DESC");
             $stmt->execute();
 
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
@@ -112,15 +112,15 @@ class Movie extends Media
         $db = Database::connection();
         $stmt = $db->prepare('INSERT INTO movies (title, director, duration, genre, isAvailable, created_at, updated_at, file_path) 
                                     VALUES (:title, :director, :duration, :genre,:isAvailable, NOW(), NOW(), :filePath)');
-        $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
-        $stmt->bindParam(':director', $director,\PDO::PARAM_STR);
-        $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
-        $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
-        $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
+        $stmt->bindParam(':title', $title,PDO::PARAM_STR);
+        $stmt->bindParam(':director', $director,PDO::PARAM_STR);
+        $stmt->bindParam(':duration', $duration,PDO::PARAM_INT);
+        $stmt->bindValue(':genre', $genre->name,PDO::PARAM_STR);
+        $stmt->bindParam(':isAvailable', $isAvailable,PDO::PARAM_BOOL);
         if ($filePath !== null) {
-            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
+            $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, PDO::PARAM_NULL);
         }
 
         $stmt->execute();
@@ -131,16 +131,16 @@ class Movie extends Media
         $stmt = $db->prepare('UPDATE movies 
                                     SET title = :title, director = :director, duration = :duration, genre = :genre, isAvailable = :isAvailable, updated_at = NOW(), file_path = :filePath
                                     WHERE id = :id');
-        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
-        $stmt->bindParam(':title', $title,\PDO::PARAM_STR);
-        $stmt->bindParam(':director', $director,\PDO::PARAM_STR);
-        $stmt->bindParam(':duration', $duration,\PDO::PARAM_INT);
-        $stmt->bindValue(':genre', $genre->name,\PDO::PARAM_STR);
-        $stmt->bindParam(':isAvailable', $isAvailable,\PDO::PARAM_BOOL);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title,PDO::PARAM_STR);
+        $stmt->bindParam(':director', $director,PDO::PARAM_STR);
+        $stmt->bindParam(':duration', $duration,PDO::PARAM_INT);
+        $stmt->bindValue(':genre', $genre->name,PDO::PARAM_STR);
+        $stmt->bindParam(':isAvailable', $isAvailable,PDO::PARAM_BOOL);
         if ($filePath !== null) {
-            $stmt->bindParam(':filePath', $filePath, \PDO::PARAM_STR);
+            $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
         } else {
-            $stmt->bindValue(':filePath', null, \PDO::PARAM_NULL);
+            $stmt->bindValue(':filePath', null, PDO::PARAM_NULL);
         }
 
         $stmt->execute();
@@ -150,16 +150,16 @@ class Movie extends Media
         $db = Database::connection();
         try {
             $stmt = $db->prepare('SELECT file_path FROM movies WHERE id = :id');
-            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $movie = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $movie = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($movie && !empty($movie['file_path']) && file_exists($movie['file_path'])) {
                 unlink($movie['file_path']);
             }
 
             $stmt = $db->prepare('DELETE FROM movies WHERE id = :id');
-            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
