@@ -33,6 +33,10 @@ Culturama est une application web de gestion de médiathèque (livres, films, al
    ```bash
    php -S localhost:8000
    ```
+4. **Accéder à l'application:**
+> [!IMPORTANT] 
+> Tu auras besoin de créer un nouvel utilisateur en t'inscrivant sur l'application.
+   
 
 ## Structure du projet
 
