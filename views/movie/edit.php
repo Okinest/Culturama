@@ -12,6 +12,10 @@ require_once ('views/layout/navbar.php');
 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md mx-auto mt-10">
     <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Modifier un film</h1>
     <form method="post" action="/movie/edit/<?= $movie['id']?>" enctype="multipart/form-data" class="space-y-4">
+        <?php if (!empty($movie['file_path'])): ?>
+            <img src="/<?= htmlspecialchars($movie['file_path']) ?>" alt="Image actuelle" class="w-32 mb-2">
+            <input type="hidden" name="currentImage" value="<?= htmlspecialchars($movie['file_path']) ?>">
+        <?php endif; ?>
         <div>
             <label for="movieImage" class="block text-gray-700 font-medium mb-1">Image du film :</label>
             <input type="file" id="movieImage" name="movieImage" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded">

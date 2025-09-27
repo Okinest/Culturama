@@ -74,7 +74,6 @@ function edit($id){
         $duration = $_POST['movieDuration'];
         $genre = Genre::from($_POST['movieGenre']);
         $isAvailable = isset($_POST['isAvailable']);
-        $filePath = null;
 
         if (isset($_FILES['movieImage']) && $_FILES['movieImage']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'assets/images/movies/';
@@ -84,6 +83,8 @@ function edit($id){
             if (move_uploaded_file($_FILES['movieImage']['tmp_name'], $targetPath)) {
                 $filePath = $targetPath;
             }
+        } else {
+            $filePath = $_POST['currentImage'] ?? $movie['file_path'];
         }
 
         if (!empty($title) && !empty($director) && !empty($duration)){

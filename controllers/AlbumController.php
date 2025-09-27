@@ -55,7 +55,6 @@ function edit($id) {
         $trackNumber = $_POST['albumTrackNumber'];
         $editor = $_POST['albumEditor'];
         $isAvailable = isset($_POST['isAvailable']);
-        $filePath = null;
 
         if (isset($_FILES['albumImage']) && $_FILES['albumImage']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'assets/images/albums/';
@@ -65,7 +64,10 @@ function edit($id) {
             if (move_uploaded_file($_FILES['albumImage']['tmp_name'], $targetPath)) {
                 $filePath = $targetPath;
             }
+        } else {
+            $filePath = $_POST['currentImage'] ?? $album['file_path'];
         }
+
         if (!empty($title) && !empty($author) && !empty($trackNumber) && !empty($editor)) {
             try {
                 Album::update($id, $title, $author, $trackNumber, $editor, $isAvailable, $filePath);

@@ -56,7 +56,6 @@ function edit($id){
         $author = $_POST['bookAuthor'];
         $pageNumber = $_POST['bookPageNumber'];
         $isAvailable = isset($_POST['isAvailable']);
-        $filePath = null;
 
         if (isset($_FILES['bookImage']) && $_FILES['bookImage']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'assets/images/books/';
@@ -66,6 +65,8 @@ function edit($id){
             if (move_uploaded_file($_FILES['bookImage']['tmp_name'], $targetPath)) {
                 $filePath = $targetPath;
             }
+        } else {
+            $filePath = $_POST['currentImage'] ?? $book['file_path'];
         }
 
         if (!empty($title) && !empty($author) && !empty($pageNumber)){
