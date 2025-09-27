@@ -112,15 +112,15 @@ function delete($id): void {
     require_once ('views/movie/cinema.php');
 }
 function loan_return($id) {
-    $album = Movie::getMovieById($id);
+    $movie = Movie::getMovieById($id);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-        if ($_POST['action'] === 'loan' && $album['isAvailable']) {
-            Movie::update($id, $album['title'], $album['director'], $album['duration'], $album['genre'], false, $album['file_path']);
-        } elseif ($_POST['action'] === 'return' && !$album['isAvailable']) {
-            Movie::update($id, $album['title'], $album['director'], $album['duration'], $album['genre'], true, $album['file_path']);
+        if ($_POST['action'] === 'loan' && $movie['isAvailable']) {
+            Movie::update($id, $movie['title'], $movie['director'], $movie['duration'], $movie['genre'], false, $movie['file_path']);
+        } elseif ($_POST['action'] === 'return' && !$movie['isAvailable']) {
+            Movie::update($id, $movie['title'], $movie['director'], $movie['duration'], $movie['genre'], true, $movie['file_path']);
         }
     }
-    header('Location: /album/show/' . $id);
+    header('Location: /movie/show/' . $id);
     exit;
 }

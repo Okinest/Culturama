@@ -146,7 +146,7 @@ class Movie extends Media
         $stmt->bindParam(':title', $title,PDO::PARAM_STR);
         $stmt->bindParam(':director', $director,PDO::PARAM_STR);
         $stmt->bindParam(':duration', $duration,PDO::PARAM_INT);
-        $stmt->bindValue(':genre', $genre->name,PDO::PARAM_STR);
+        $stmt->bindValue(':genre', $genre,PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable,PDO::PARAM_BOOL);
         if ($filePath !== null) {
             $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
