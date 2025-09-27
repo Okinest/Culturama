@@ -21,8 +21,8 @@ Culturama est une application web de gestion de médiathèque (livres, films, al
 
 1. **Cloner le dépôt :**
    ```bash
-   git clone https://github.com/Okinest/POC_MVC.git
-   cd POC_MVC
+   git clone https://github.com/Okinest/Culturama.git
+   cd Culturama
    ```
 
 2. **Configurer la base de données :**
