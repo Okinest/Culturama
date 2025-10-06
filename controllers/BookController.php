@@ -104,6 +104,6 @@ function loan_return($id) {
             Book::update($id, $album['title'], $album['author'], $album['pageNumber'],true, $album['file_path']);
         }
     }
-    header('Location: /album/show/' . $id);
+    header('Location: /book/show/' . $id);
     exit;
 }

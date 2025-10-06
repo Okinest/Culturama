@@ -96,10 +96,18 @@ class Movie extends Media
 
             $filtered = [];
             foreach ($allMovies as $movie) {
+                $title = strtolower($movie['title']);
                 $director = strtolower($movie['director']);
 
+                $titleWords = explode(' ', $title);
                 $directorWords = explode(' ', $director);
                 foreach ($directorWords as $word) {
+                    if (str_contains($word, $searchTerm) || levenshtein($searchTerm, $word) <= 2) {
+                        $filtered[] = $movie;
+                        continue 2;
+                    }
+                }
+                foreach ($titleWords as $word) {
                     if (str_contains($word, $searchTerm) || levenshtein($searchTerm, $word) <= 2) {
                         $filtered[] = $movie;
                         continue 2;
@@ -146,7 +154,7 @@ class Movie extends Media
         $stmt->bindParam(':title', $title,PDO::PARAM_STR);
         $stmt->bindParam(':director', $director,PDO::PARAM_STR);
         $stmt->bindParam(':duration', $duration,PDO::PARAM_INT);
-        $stmt->bindValue(':genre', $genre,PDO::PARAM_STR);
+        $stmt->bindValue(':genre', $genre->name,PDO::PARAM_STR);
         $stmt->bindParam(':isAvailable', $isAvailable,PDO::PARAM_BOOL);
         if ($filePath !== null) {
             $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
